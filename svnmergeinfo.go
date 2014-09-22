@@ -3,7 +3,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"os/exec"
 	"strings"
@@ -22,7 +21,8 @@ func init() { // {{{
 } // }}}
 func main() {
 	if from == "" || to == "" {
-		log.Fatalln("missing arguments")
+		fmt.Println("missing arguments!\nExample:\n\tsvnmergeinfo release-1.0/ trunk")
+		os.Exit(1)
 	}
 
 	revs := strings.Fields(run("svn", "mergeinfo", "--show-revs", "eligible", from, to))
@@ -46,8 +46,6 @@ func run(head string, parts ...string) string { // {{{
 	var out []byte
 
 	head, err = exec.LookPath(head)
-	//fmt.Println(head)
-	//fmt.Println(parts)
 	if err != nil {
 		fmt.Printf("LookPath Error: %s", err)
 	}
@@ -55,7 +53,6 @@ func run(head string, parts ...string) string { // {{{
 	if err != nil {
 		fmt.Printf("Error: %s", err)
 	}
-	//fmt.Printf("Output: %s", out)
 	return string(out)
 
 } // }}}
