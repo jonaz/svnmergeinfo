@@ -3,8 +3,9 @@ svnmergeinfo
 
 Go script to easy list revs eligible for merge between two branches. 
 
-Install with:
+Make sure you have go installed and your $GOPATH pointing to your home/go folder. 
+Then install with: 
 ```
-   go get -u github.com/jonaz/svnmergeinfo
+go get -u github.com/jonaz/svnmergeinfo
 ```
 
