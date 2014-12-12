@@ -8,29 +8,21 @@ import (
 	"strings"
 )
 
-var from string = ""
-var to string = ""
-
-func init() { // {{{
-	if len(os.Args) > 1 {
-		from = os.Args[1]
-	}
-	if len(os.Args) > 2 {
-		to = os.Args[2]
-	}
-} // }}}
 func main() {
-	if from == "" || to == "" {
+	if len(os.Args) != 3 {
 		fmt.Println("missing arguments!\nExample:\n\tsvnmergeinfo release-1.0/ trunk")
 		os.Exit(1)
 	}
+
+	from := os.Args[1]
+	to := os.Args[2]
 
 	revs := strings.Fields(run("svn", "mergeinfo", "--show-revs", "eligible", from, to))
 	ch := make(chan string)
 
 	//Run svn log for each revs in paralell
 	for _, rev := range revs {
-		go getRev(rev, ch)
+		go getRev(from, rev, ch)
 	}
 
 	//wait for the result of each svn log and print it!
@@ -38,7 +30,7 @@ func main() {
 		fmt.Println(<-ch)
 	}
 }
-func getRev(rev string, ch chan string) { // {{{
+func getRev(from, rev string, ch chan string) { // {{{
 	ch <- run("svn", "log", "-r", rev, from)
 }                                               // }}}
 func run(head string, parts ...string) string { // {{{
